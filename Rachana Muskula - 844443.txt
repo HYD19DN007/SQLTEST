@@ -1,0 +1,51 @@
+1)Dependant Table
+
+CREATE TABLE [dbo].[Dependant](
+	[EmpNo] [int] NOT NULL,
+	[DependentID] [int] NOT NULL,
+	[Name] [nvarchar](50) NULL,
+	[Relation] [nvarchar](50) NULL,
+ CONSTRAINT [PK_Dependant] PRIMARY KEY CLUSTERED 
+(
+	[EmpNo] ASC,
+	[DependentID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+
+
+2)UserDefined Table
+
+Create type Udp as table
+(
+ EmpNo int,
+ DependentID int,
+ name nvarchar(50),
+ Relation nvarchar(50)
+)
+
+
+
+3)Stored Procedure
+
+Create procedure sp_Dependant
+@User_Def Udp Readonly
+as
+Begin
+insert into Dependant select * from @User_Def 
+End
+
+
+4)Test the Stored Procedure
+
+Declare @UD Udp
+Begin
+insert into @UD values(1,101,'Rachana','Sister')
+insert into @UD values(2,102,'Samikya','sister')
+End
+
+Exec sp_Dependant @UD
+
+Select * from Dependant

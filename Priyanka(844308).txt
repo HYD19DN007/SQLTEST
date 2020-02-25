@@ -1,0 +1,32 @@
+Step 1:Creating Dependent table
+create table Dependent(Empno int,DependentID int,Name nvarchar(50) not null,Relation nvarchar(50) not null
+constraint CK_Emp primary key(Empno,DependentID))
+
+Step2:Creating user defined type
+create type optype as table
+(
+Empno int,
+DependentID int,
+Name nvarchar(50),
+Relation nvarchar(50)
+)
+
+Step3:Creating StoredProcedure
+alter procedure sp_Dependent
+@D optype readonly
+as
+begin
+insert into Dependent select * from @D
+end
+
+Step 4:Inserting values 
+declare @op optype
+begin
+insert into @op values(1,10,'Ramu','Father')
+insert into @op values(2,20,'Sita','Mother')
+insert into @op values(3,30,'Heena','Daughter')
+end
+exec sp_Dependent @op 
+
+Step 5:Testing
+select * from Dependent

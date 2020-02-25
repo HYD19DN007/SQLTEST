@@ -1,0 +1,24 @@
+1.create type
+create type type1 as table
+(
+ DependentID int,
+empno int,
+ Name nvarchar(10),
+ Relation nvarchar(10))
+
+create procedure sp_dependent
+@order type1 readonly
+as
+begin
+insert into Dependent select * from @order
+end
+
+declare 
+@op type1
+begin
+insert into @op values(12,104,'aaaa','fr')
+insert into @op values(13,105,'bbbb','dr')
+exec sp_dependent @op
+end
+
+select * from dependent

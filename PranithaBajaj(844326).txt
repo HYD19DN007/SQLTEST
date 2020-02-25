@@ -1,0 +1,34 @@
+---creating table
+create table Dependent(EmpNo int ,
+			DependentID int,
+			Name nvarchar(20) not null,
+			Relation nvarchar(20) not null,
+			Constraint com_ED primary key(EmpNo,DependentID))
+
+--creating tdtype
+create type tdtype as table
+(
+	Empno int,
+	DependentID int,
+	Name nvarchar(50),
+	Relation nvarchar(50)
+)
+
+--creating stored procedure
+alter procedure sp_Dependent
+@tbl_Depend tdtype readonly
+as
+begin
+	insert into Dependent select * from @tbl_Depend
+end
+
+--inserting and testing
+declare @td tdtype
+begin
+	insert into @td values(1,11,'A','FA')
+	insert into @td values(2,20,'B','FB')
+	insert into @td values(3,30,'C','FC')
+end
+exec sp_Dependent @td
+
+select * from Dependent

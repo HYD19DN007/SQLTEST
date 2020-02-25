@@ -1,0 +1,33 @@
+
+======table creation===========
+create table dependents(Empno int ,
+Dependentid int,name nvarchar(20) not null ,Relation nvarchar(20) not null,
+
+primary key(Empno,Dependentid))
+
+======type=======
+create type emptype as table
+(
+     EmpNo  int,
+     DependentID  int ,
+	 Name nvarchar(25) ,
+	 Relation nvarchar(25)
+)
+===========stored procedure===============
+create procedure sp_dependent
+@emp emptype readonly
+as
+begin
+insert into Dependents select * from @emp
+end
+
+begin
+declare @ep as emptype
+insert into @ep values(1,2,'ram','brother')
+insert into @ep values(2,3,'chandra','father')
+insert into @ep values(3,2,'sudha','mother')
+end
+
+exec sp_dependent @ep
+
+select * from dependents

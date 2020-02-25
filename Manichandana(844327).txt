@@ -1,0 +1,43 @@
+step 1: creating a  dependent table
+
+	create table Dependent(EmpNo int ,
+				DependentID int ,
+				Name nvarchar(20) not null,
+				Relation nvarchar(20) not null,
+				Constraint cmp_key primary Key(EmpNo,DependentID)
+				)
+
+
+step 2: creating a type 
+
+	create Type DependentType as table
+	(
+	EmpNo int,
+	DependentID  int,
+	Name  nvarchar(20),
+	Relation nvarchar(20)
+
+	)
+
+step 3: creating a stored procedure to insert data into Dependent table
+	
+	create procedure sp_InsertData
+	@d DependentType readonly
+	as
+	begin
+		insert into Dependent select *from @d
+
+	end
+
+step : Testing
+
+	declare
+	@d DependentType
+	begin
+		insert into @d values(1,1,'rani','mother')
+		insert into @d values(1,2,'raja','father')	
+	end
+	exec sp_InsertData @d
+	select *from Dependent
+
+	

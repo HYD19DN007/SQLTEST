@@ -1,0 +1,42 @@
+----**********TABLE CREATION*****************
+create table dependents(
+Empno int ,
+Dependentid int,
+name nvarchar(20) not null,
+Relation nvarchar(20) not null,
+primary key(Empno,Dependentid))
+----*****type*****************
+create type dept as table
+(
+empno int,
+dependentid int,
+Name nvarchar(50),
+Relation nvarchar(50)
+)
+--**********STORED-PROCEDURE************
+create procedure sp_dependent
+@dept_tab dept readonly
+as
+begin
+insert into Dependent select * from @dept_tab
+end
+
+
+
+
+
+--*********
+declare @dep dept
+begin 
+insert into @dep values(6,7,'Ram','father')
+insert into @dep values(9,5,'sita','mother')
+
+end
+exec sp_dependent @dep
+
+
+
+
+
+
+select * from dependents

@@ -1,0 +1,61 @@
+1)Table
+
+
+CREATE TABLE [dbo].[Dependent](
+	[EmpNo] [int] NOT NULL,
+	[DependentID] [int] NOT NULL,
+	[Name] [nvarchar](50) NULL,
+	[Relation] [nvarchar](50) NULL,
+ CONSTRAINT [PK_Dependent] PRIMARY KEY CLUSTERED 
+(
+	[EmpNo] ASC,
+	[DependentID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+
+----------------------------------------------------------------------------------------------------------------
+
+
+2)UserDefined Table
+
+Create TYPE UD AS TABLE 
+(
+	EmpNo int,
+	DependentID int,
+	Name nvarchar(50),
+	Relation nvarchar(50)
+)
+GO
+
+
+----------------------------------------------------------------------------------------------------------------
+
+3)Stored Procedure
+
+
+create procedure sp_Dependent
+@ud UD readonly
+as
+begin 
+
+insert into Dependent select * from @ud
+
+end
+
+
+-----------------------------------------------------------------------------------------------------------------------
+
+4)Testing the Stored Procedure
+
+declare 
+@op UD
+begin
+insert into @op values(1,101,'aaa','xyz')
+insert into @op values(2,102,'bbb','zzz')
+end
+exec sp_Dependent @op
+
+select * from Dependent
+
+---------------------------------------------------------------------------------------------------------------------------

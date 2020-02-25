@@ -1,0 +1,37 @@
+create table Dependent_1
+( EmpNo int not null,
+DependentID int not null,
+ Name nvarchar(20),
+  Relation nvarchar(20),
+  CONSTRAINT PK_ED PRIMARY KEY(EmpNo,DependentID))
+
+
+
+   create type optype as table
+(
+     EmpNo  int,
+     DependentID  int ,
+	 Name nvarchar(25) ,
+	 Relation nvarchar(25)
+)
+
+alter procedure sp_Dependent_1
+@emp optype readonly
+as
+begin
+insert into Dependent_1 select * from @emp
+end
+
+declare @op as optype
+begin
+insert into @op values(1,2,'sai','brother')
+insert into @op values(2,3,'raghu','father')
+insert into @op values(3,2,'uma','mother')
+insert into @op values(4,1,'niharika','sister')
+
+end
+
+exec sp_Dependent_1 @op
+
+select * from Dependent_1
+
